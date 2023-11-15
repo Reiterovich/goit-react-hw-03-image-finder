@@ -70,7 +70,7 @@ export class App extends Component {
     });
 
     if (this.state.array.length !== 0) {
-      this.state.array.map(img => {
+      return this.state.array.map(img => {
         if (img.id === id) {
           this.setState({ img: img });
         }
