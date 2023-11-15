@@ -9,7 +9,7 @@ import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
-    array: [{}],
+    array: [],
     page: 1,
     searchValue: '',
     length: null,
@@ -71,7 +71,7 @@ export class App extends Component {
 
     if (this.state.array.length !== 0) {
       const arrayPhoto = this.state.array;
-      arrayPhoto.map(img => {
+      const arr = arrayPhoto.map(img => {
         if (img.id === id) {
           this.setState(prevState => {
             return {
@@ -79,21 +79,9 @@ export class App extends Component {
             };
           });
         }
+        return arr;
       });
     }
-
-    // document.addEventListener('keydown', event => {
-    //   if (event.key === 'Escape') {
-    //     this.setState(prevState => {
-    //       return {
-    //         modal: false,
-    //         id: null,
-    //         img: null,
-    //       };
-    //     });
-    //   }
-    //   document.removeEventListener('keydown', event => {});
-    // });
   };
 
   owerLayOff = evt => {
