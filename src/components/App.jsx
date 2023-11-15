@@ -23,7 +23,6 @@ export class App extends Component {
     this.setState({
       searchValue: inputValue,
     });
-    console.log(inputValue);
   };
 
   async componentDidUpdate(_, prevState) {
@@ -70,17 +69,16 @@ export class App extends Component {
       };
     });
 
-    const arrayPhohto = this.state.array;
-
-    arrayPhohto.map(img => {
-      if (img.id === id) {
-        console.log(img.previewURL);
-        this.setState({ img: img });
-      }
-    });
+    if (this.state.array.length > 0) {
+      const arrayPhohto = this.state.array;
+      arrayPhohto.map(img => {
+        if (img.id === id) {
+          this.setState({ img: img });
+        }
+      });
+    }
 
     document.addEventListener('keydown', event => {
-      console.log('Keydown: ', event.key);
       if (event.key === 'Escape') {
         this.setState(prevState => {
           return {
@@ -89,15 +87,18 @@ export class App extends Component {
           };
         });
       }
+      document.removeEventListener('keydown', event => {});
     });
   };
 
   photoForModal = async id => {
-    const arrayPhohto = this.state.array;
-    arrayPhohto.map(img => {
-      if (img.id === id) {
-      }
-    });
+    if (this.state.array.length > 0) {
+      const arrayPhohto = this.state.array;
+      arrayPhohto.map(img => {
+        if (img.id === id) {
+        }
+      });
+    }
   };
 
   owerLayOff = evt => {
