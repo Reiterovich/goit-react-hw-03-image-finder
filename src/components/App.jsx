@@ -70,8 +70,7 @@ export class App extends Component {
     });
 
     if (this.state.array.length > 0) {
-      const arrayPhohto = this.state.array;
-      arrayPhohto.map(img => {
+      this.state.array.map(img => {
         if (img.id === id) {
           this.setState({ img: img });
         }
@@ -93,8 +92,7 @@ export class App extends Component {
 
   photoForModal = async id => {
     if (this.state.array.length > 0) {
-      const arrayPhohto = this.state.array;
-      arrayPhohto.map(img => {
+      this.state.array.map(img => {
         if (img.id === id) {
         }
       });
