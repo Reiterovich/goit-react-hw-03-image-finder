@@ -9,7 +9,7 @@ import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
-    array: [],
+    array: [{}],
     page: 1,
     searchValue: '',
     length: null,
@@ -87,6 +87,7 @@ export class App extends Component {
           return {
             modal: false,
             id: null,
+            img: null,
           };
         });
       }
@@ -108,23 +109,19 @@ export class App extends Component {
       this.setState(prevState => {
         return {
           modal: false,
+          img: null,
+          id: null,
         };
       });
     }
   };
-
-  owerLayOffEsc = evt => {};
 
   render() {
     return (
       <div className="App">
         <Searchbar onSubmit={this.onSubmit} />
         {this.state.modal && (
-          <Modal
-            owerLayOffEsc={this.owerLayOffEsc}
-            owerLayOff={this.owerLayOff}
-            modalImg={this.state.img}
-          />
+          <Modal owerLayOff={this.owerLayOff} modalImg={this.state.img} />
         )}
         <ImageGallery>
           <ImageGalleryItem
