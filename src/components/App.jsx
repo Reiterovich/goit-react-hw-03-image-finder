@@ -70,9 +70,13 @@ export class App extends Component {
     });
 
     if (this.state.array.length !== 0) {
-      return this.state.array.map(img => {
+      this.state.array.map(img => {
         if (img.id === id) {
-          this.setState({ img: img });
+          this.setState(prevState => {
+            return {
+              img: img,
+            };
+          });
         }
       });
     }
