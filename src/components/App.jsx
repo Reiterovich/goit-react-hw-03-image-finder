@@ -69,7 +69,8 @@ export class App extends Component {
       };
     });
 
-    if (this.state.array.length > 0) {
+    if (this.state.array.length !== 0) {
+      console.log(this.state.array.length);
       this.state.array.map(img => {
         if (img.id === id) {
           this.setState({ img: img });
