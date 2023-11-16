@@ -61,27 +61,14 @@ export class App extends Component {
     });
   };
 
-  openModal = id => {
+  openModal = (id, img) => {
     this.setState(prevState => {
       return {
         modal: true,
         id: id,
+        img: img,
       };
     });
-
-    if (this.state.array.length !== 0) {
-      const arrayPhoto = this.state.array;
-      const arr = arrayPhoto.map(img => {
-        if (img.id === id) {
-          this.setState(prevState => {
-            return {
-              img: img,
-            };
-          });
-        }
-        return arr;
-      });
-    }
   };
 
   owerLayOff = evt => {
