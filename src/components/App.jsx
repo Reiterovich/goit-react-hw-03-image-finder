@@ -15,8 +15,9 @@ export class App extends Component {
     length: null,
     loader: false,
     modal: false,
-    id: 1,
+    id: null,
     img: null,
+    error: null,
   };
 
   onSubmit = inputValue => {
@@ -27,41 +28,84 @@ export class App extends Component {
 
   async componentDidUpdate(_, prevState) {
     if (this.state.searchValue !== prevState.searchValue) {
-      await this.setState({
-        array: [],
+      this.setState({
         loader: true,
-        page: 1,
+        array: [],
       });
 
-      const data = await funSearch(this.state.searchValue, this.state.page);
+      try {
+        const data = await funSearch(this.state.searchValue, 1);
+
+        if (data.hits.length === 0) {
+          window.alert(
+            'Sorry,--- nothing was found for your query. Look for something else.'
+          );
+          return;
+        }
+
+        this.setState(prevState => {
+          return {
+            array: data.hits,
+            length: data.hits.length,
+          };
+        });
+      } catch (error) {
+        this.setState({ error });
+        window.alert(this.state.error.message);
+      } finally {
+        this.setState({ loader: false });
+      }
+    }
+
+    if (this.state.page !== prevState.page) {
       this.setState({
-        array: data,
-        length: data.length,
-        loader: false,
+        loader: true,
       });
+
+      try {
+        const data = await funSearch(this.state.searchValue, this.state.page);
+
+        this.setState(prevState => {
+          return {
+            array: [...prevState.array, ...data.hits],
+            length: data.hits.length,
+          };
+        });
+      } catch (error) {
+        this.setState({ error });
+        window.alert(this.state.error.message);
+      } finally {
+        this.setState({ loader: false });
+      }
     }
   }
 
-  loadMore = async () => {
-    await this.setState(prevState => {
-      return {
-        loader: true,
-        page: prevState.page + 1,
-      };
-    });
-
-    const data = await funSearch(this.state.searchValue, this.state.page);
-
+  loadMore = () => {
     this.setState(prevState => {
       return {
-        array: [...prevState.array, ...data],
-        length: data.length,
-        loader: false,
+        page: prevState.page + 1,
       };
     });
   };
 
   openModal = (id, img) => {
+    const closeModal = event => {
+      if (event.key === 'Escape') {
+        console.log('Escape');
+        this.setState(prevState => {
+          return {
+            modal: false,
+            id: null,
+            img: null,
+          };
+        });
+      }
+    };
+
+    document.addEventListener('keydown', event => {
+      closeModal(event);
+    });
+
     this.setState(prevState => {
       return {
         modal: true,

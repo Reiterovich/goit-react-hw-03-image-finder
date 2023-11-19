@@ -13,6 +13,6 @@ export async function funSearch(value, page) {
         q: value,
       },
     })
-    .then(response => response.data.hits)
-    .catch(error => console.log(error));
+    .then(response => response.data)
+    .catch(error => window.alert(error.message));
 }
