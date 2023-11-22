@@ -88,33 +88,6 @@ export class App extends Component {
     });
   };
 
-  closeModal = event => {
-    if (event.key === 'Escape') {
-      console.log('Escape');
-      this.setState(prevState => {
-        return {
-          modal: false,
-          id: null,
-          img: null,
-        };
-      });
-    }
-  };
-
-  componentDidMount() {
-    if (this.state.modal) {
-      document.addEventListener('keydown', event => {
-        this.closeModal(event);
-      });
-    }
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', event => {
-      this.closeModal(event);
-    });
-  }
-
   openModal = (id, img) => {
     this.setState(prevState => {
       return {
@@ -137,12 +110,29 @@ export class App extends Component {
     }
   };
 
+  closeModal = event => {
+    if (event.key === 'Escape') {
+      console.log('Escape');
+      this.setState(prevState => {
+        return {
+          modal: false,
+          id: null,
+          img: null,
+        };
+      });
+    }
+  };
+
   render() {
     return (
       <div className="App">
         <Searchbar onSubmit={this.onSubmit} />
         {this.state.modal && (
-          <Modal owerLayOff={this.owerLayOff} modalImg={this.state.img} />
+          <Modal
+            closeModal={this.closeModal}
+            owerLayOff={this.owerLayOff}
+            modalImg={this.state.img}
+          />
         )}
         <ImageGallery>
           <ImageGalleryItem
