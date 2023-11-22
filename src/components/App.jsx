@@ -88,24 +88,34 @@ export class App extends Component {
     });
   };
 
-  openModal = (id, img) => {
-    const closeModal = event => {
-      if (event.key === 'Escape') {
-        console.log('Escape');
-        this.setState(prevState => {
-          return {
-            modal: false,
-            id: null,
-            img: null,
-          };
-        });
-      }
-    };
+  closeModal = event => {
+    if (event.key === 'Escape') {
+      console.log('Escape');
+      this.setState(prevState => {
+        return {
+          modal: false,
+          id: null,
+          img: null,
+        };
+      });
+    }
+  };
 
-    document.addEventListener('keydown', event => {
-      closeModal(event);
+  componentDidMount() {
+    if (this.state.modal) {
+      document.addEventListener('keydown', event => {
+        this.closeModal(event);
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', event => {
+      this.closeModal(event);
     });
+  }
 
+  openModal = (id, img) => {
     this.setState(prevState => {
       return {
         modal: true,
