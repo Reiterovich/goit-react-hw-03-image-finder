@@ -12,29 +12,43 @@ export class App extends Component {
     array: [],
     page: 1,
     searchValue: '',
-    length: null,
     loader: false,
     modal: false,
-    id: null,
+    tags: null,
     img: null,
     error: null,
+    loadMore: false,
   };
+  // state = {
+  //   array: [],
+  //   page: 1,
+  //   searchValue: '',
+  //   length: null,
+  //   loader: false,
+  //   modal: false,
+  //   id: null,
+  //   img: null,
+  //   error: null,
+  // };
 
   onSubmit = inputValue => {
     this.setState({
       searchValue: inputValue,
+      array: [],
+      page: 1,
     });
   };
 
   async componentDidUpdate(_, prevState) {
-    if (this.state.searchValue !== prevState.searchValue) {
+    if (
+      this.state.searchValue !== prevState.searchValue ||
+      this.state.page !== prevState.page
+    ) {
       this.setState({
         loader: true,
-        array: [],
       });
-
       try {
-        const data = await funSearch(this.state.searchValue, 1);
+        const data = await funSearch(this.state.searchValue, this.state.page);
 
         if (data.hits.length === 0) {
           window.alert(
@@ -45,56 +59,23 @@ export class App extends Component {
 
         this.setState(prevState => {
           return {
-            array: data.hits,
-            length: data.hits.length,
-          };
-        });
-      } catch (error) {
-        this.setState({ error });
-        window.alert(this.state.error.message);
-      } finally {
-        this.setState({ loader: false });
-      }
-    }
-
-    if (this.state.page !== prevState.page) {
-      this.setState({
-        loader: true,
-      });
-
-      try {
-        const data = await funSearch(this.state.searchValue, this.state.page);
-
-        this.setState(prevState => {
-          return {
             array: [...prevState.array, ...data.hits],
-            length: data.hits.length,
+            loadMore: this.state.page < Math.ceil(data.totalHits / 12),
           };
         });
       } catch (error) {
         this.setState({ error });
-        window.alert(this.state.error.message);
       } finally {
         this.setState({ loader: false });
       }
     }
   }
 
-  loadMore = () => {
-    this.setState(prevState => {
-      return {
-        page: prevState.page + 1,
-      };
-    });
-  };
-
-  openModal = (id, img) => {
-    this.setState(prevState => {
-      return {
-        modal: true,
-        id: id,
-        img: img,
-      };
+  openModal = (tags, img) => {
+    this.setState({
+      modal: true,
+      tags: tags,
+      img: img,
     });
   };
 
@@ -110,38 +91,41 @@ export class App extends Component {
     }
   };
 
-  closeModal = event => {
-    if (event.key === 'Escape') {
-      console.log('Escape');
-      this.setState(prevState => {
-        return {
-          modal: false,
-          id: null,
-          img: null,
-        };
-      });
-    }
+  closeModal = () => {
+    this.setState({
+      modal: false,
+      tags: null,
+      img: null,
+    });
   };
 
   render() {
     return (
       <div className="App">
         <Searchbar onSubmit={this.onSubmit} />
+
         {this.state.modal && (
           <Modal
             closeModal={this.closeModal}
-            owerLayOff={this.owerLayOff}
+            tags={this.state.tags}
             modalImg={this.state.img}
           />
         )}
+
         <ImageGallery>
           <ImageGalleryItem
             openModal={this.openModal}
             arrayPhotos={this.state.array}
           />
-          <Loader loader={this.state.loader} />
-          {this.state.length >= 12 && <Button loadMore={this.loadMore} />}
         </ImageGallery>
+
+        <Loader loader={this.state.loader} />
+
+        {this.state.error && <p>Something went wrong ....</p>}
+
+        {this.state.loadMore &&
+          !this.state.loader &&
+          this.state.array.length > 0 && <Button loadMore={this.loadMore} />}
       </div>
     );
   }
