@@ -19,17 +19,6 @@ export class App extends Component {
     error: null,
     loadMore: false,
   };
-  // state = {
-  //   array: [],
-  //   page: 1,
-  //   searchValue: '',
-  //   length: null,
-  //   loader: false,
-  //   modal: false,
-  //   id: null,
-  //   img: null,
-  //   error: null,
-  // };
 
   onSubmit = inputValue => {
     this.setState({
@@ -79,23 +68,19 @@ export class App extends Component {
     });
   };
 
-  owerLayOff = evt => {
-    if (evt.target === evt.currentTarget) {
-      this.setState(prevState => {
-        return {
-          modal: false,
-          img: null,
-          id: null,
-        };
-      });
-    }
-  };
-
   closeModal = () => {
     this.setState({
       modal: false,
       tags: null,
       img: null,
+    });
+  };
+
+  loadMore = () => {
+    this.setState(prevState => {
+      return {
+        page: prevState.page + 1,
+      };
     });
   };
 

@@ -8,6 +8,10 @@ export class Searchbar extends Component {
   hendleSubmit = evt => {
     evt.preventDefault();
 
+    if (!this.state.search.trim()) {
+      return alert('Can not be empty');
+    }
+
     this.props.onSubmit(this.state.search);
   };
 

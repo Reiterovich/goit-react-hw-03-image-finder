@@ -4,7 +4,7 @@ export const ImageGalleryItem = ({ arrayPhotos, openModal }) => {
       {arrayPhotos.length !== 0 &&
         arrayPhotos.map(img => (
           <li
-            onClick={() => openModal(img.id, img.largeImageURL)}
+            onClick={() => openModal(img.tags, img.largeImageURL)}
             key={img.id}
             className="ImageGalleryItem"
           >
