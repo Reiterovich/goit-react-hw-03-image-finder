@@ -41,7 +41,7 @@ export class App extends Component {
 
         if (data.hits.length === 0) {
           window.alert(
-            'Sorry,--- nothing was found for your query. Look for something else.'
+            'Sorry, nothing was found for your query. Look for something else.'
           );
           return;
         }
